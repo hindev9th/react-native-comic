@@ -1,11 +1,23 @@
 import {useEffect, useState} from "react";
 import requestApi from "@/config/http/request";
-import {chapter, response, responseChapter} from "@/types/response";
+import {chapter, chapterNumber, response, responseChapter} from "@/types/response";
 
 export const useFetchChapters = (id: string, page: number) => {
   const [isLoading, setIsLoading] = useState(true);
   const [chapters, setChapters] = useState<chapter[]>([]);
   const [isNext, setIsNext] = useState(true);
+
+  const firstNumber = async () => {
+    try {
+      const response = await requestApi.get<response<chapterNumber>>(`/api/comic/${id}/chapterNumber`);
+      const result = response.data.result;
+      setIsLoading(false);
+      return +result.chapterNumbers[result.chapterNumbers.length - 1];
+    } catch (error) {
+      setIsLoading(false);
+      return 1
+    }
+  }
 
   const fetchChapters = async () => {
     setIsLoading(true);
@@ -29,5 +41,5 @@ export const useFetchChapters = (id: string, page: number) => {
     fetchChapters();
   }, [page, id]);
 
-  return {chapters, isLoading, isNext};
+  return {chapters, isLoading, isNext , firstNumber};
 }

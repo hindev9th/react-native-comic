@@ -65,6 +65,13 @@ export type chapter = {
   serversName: null;
 }
 
+export type chapterNumber =  {
+  comicId: any
+  comicName: any
+  chapterNumbers: string[]
+  chapterIds: string[]
+}
+
 export type page = {
   state: boolean;
   block: boolean;
